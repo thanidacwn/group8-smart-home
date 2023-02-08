@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from routers import locker
+from routers import rooms
 
 
 app = FastAPI()
-app.include_router(locker.router)
+app.include_router(rooms.router)
 
 
 @app.get("/")
