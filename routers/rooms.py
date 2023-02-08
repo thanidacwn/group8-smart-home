@@ -1,20 +1,7 @@
 from fastapi import APIRouter, Body, HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from pymongo import MongoClient
-from dotenv import load_dotenv
-import os
-
-load_dotenv(".env")
-username = 'exceed08'
-password = '427YQucG'
-
-client = MongoClient(
-    f"mongodb://{username}:{password}@mongo.exceed19.online:8443/?authMechanism=DEFAULT"
-)
-
-db = client["exceed08"]
-collection = db["smart_home"]
+from database.mongo_connection import *
 
 router = APIRouter(
     prefix="",
