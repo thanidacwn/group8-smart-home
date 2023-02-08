@@ -1,32 +1,13 @@
 /*
 import axios from "axios"
 
-export async function getRoom1() {
-    const res = await axios.get("")
+export async function getRoom() {
+    const res = await axios.get("/update_web_data")
     return res.data
 }
 
-export async function getRoom2() {
-    const res = await axios.get("")
-    return res.data
-}
-
-export async function getRoom3() {
-    const res = await axios.get("")
-    return res.data
-}
-export async function postRoom1() {
-    const res = await axios.post("")
-    return res.data
-}
-
-export async function postRoom2() {
-    const res = await axios.post("")
-    return res.data
-}
-
-export async function postRoom3() {
-    const res = await axios.post("")
+export async function postRoom(json) {
+    const res = await axios.post("/web_data", json)
     return res.data
 }
 */
