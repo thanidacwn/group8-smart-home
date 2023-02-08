@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { getRoom } from '../services/rooms'
-import { postRoom } from '../services/rooms'
+//import { getRoom } from '../services/rooms'
+//import { postRoom } from '../services/rooms'
 import Card from '../components/Card'
 
 const Home=()=> {
@@ -21,17 +21,16 @@ const Home=()=> {
           is_auto: 0,
         },
     })
-    
+    /*
     useEffect(() => {
         setInterval(() => {
             getRoom().then(data => setRoomInfo(data))
         },1000)
     }, [])
-
+    */
     const handleChangeInfo = (room, state, brightness, is_auto) => {
         setRoomInfo({...roomInfo, })
     }
-    
     return (
         <div>
             <h1>Home</h1>
