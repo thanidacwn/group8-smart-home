@@ -67,7 +67,7 @@ def update_all_rooms_from_hardware(data: Data):
             raise HTTPException(status_code=400, detail="Light is in auto mode. Can not manually switched the light.")
         else:
             collection.update_one({"room_num": i}, {"$set": {"state": room.state}})
-        collection.update_one({"room_num": i}, {"$set": {"brightness": room.brightness}})
+        collection.update_one({"room_num":i}, {"$set": {"brightness": room.brightness}})
         result[f"room{i}"] = collection.find_one({"room_num": i}, {"_id": False})
     return {"results": result}
 
@@ -84,7 +84,7 @@ def update_data_from_front(data: Data):
             raise HTTPException(status_code=400, detail="Light is in auto mode. Can not manually switched the light.")
         else:
             collection.update_one({"room_num": i}, {"$set": {"state": room.state}})
-        collection.update_one({"room_num": i}, {"$set": {"brightness": percentage_to_binary(room.brightness)}})
+        collection.update_one({"room_num":i}, {"$set": {"brightness": percentage_to_binary(room.brightness)}})
         result[f"room{i}"] = collection.find_one({"room_num": i}, {"_id": False})
     return {"results": result}
  
