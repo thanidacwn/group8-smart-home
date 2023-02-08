@@ -4,9 +4,19 @@
 #include <Bounce2.h>
 
 
-const String baseUrl = "https://exceed-hardware-stamp465.koyeb.app";
+const String baseUrl = "";
 
+int britgthness1;
+int is_auto1;
+int state1;
 
+int britgthness2;
+int is_auto2;
+int state2;
+
+int britgthness3;
+int is_auto3;
+int state3;
 
 void Connect_Wifi()
 {
@@ -32,7 +42,7 @@ void GET_room()
   DynamicJsonDocument doc(65536);
 
   HTTPClient http;
-  const String url = baseUrl + "/getroom";
+  const String url = baseUrl + "/web_data";
   http.begin(url);
 
   Serial.println("get room");
@@ -41,10 +51,6 @@ void GET_room()
   {
     String payload = http.getString();
     deserializeJson(doc, payload);
-    JsonArray all = doc["all_traffic"].as<JsonArray>();
-    for (JsonObject a: all){
-
-    }
   }
   else
   {
@@ -55,22 +61,32 @@ void GET_room()
   Serial.println("----------------------------------");
 }
 
-void POST_update_room(String led)
+void POST_update_room()
 {
-  const String url = baseUrl + "/update_room";
+  const String url = baseUrl + "/update_web_data";
   String json;
   HTTPClient http;
   http.begin(url);
   http.addHeader("Content-Type", "application/json");
   DynamicJsonDocument doc(2048);
 
- // value in json
-  doc["room"] = "td7vz";
-  doc["room"] = led;
   
-  serializeJson(doc, json); // convert Dynamic ---> string json
+ // value in json
+  doc["room1"]["state"] = state1;
+  doc["room1"]["brigthness"] = britgthness1;
+  doc["room1"]["is_auto"] = is_auto1;
 
-  Serial.println("POST " + led);
+  doc["room2"]["state"] = state2;
+  doc["room2"]["brigthness"] = britgthness2;
+  doc["room2"]["is_auto"] = is_auto2;
+
+  doc["room3"]["state"] = state3;
+  doc["room3"]["brigthness"] = britgthness3;
+  doc["room3"]["is_auto"] = is_auto3;
+  
+  
+  serializeJson(doc, json);
+
   int httpResponseCode = http.POST(json);
   if (httpResponseCode == 200)
   {
