@@ -13,112 +13,67 @@ int status_room3 = 0;
 int value_light1 = 255;
 int value_light2 = 255;
 int value_light3 = 255;
-int auto_light1 = 1;
-int auto_light2 = 1;
-int auto_light3 = 1;
+int auto_light1 = 0;
+int auto_light2 = 0;
+int auto_light3 = 0;
 int sensor_LDR;
 #define BUTTON 27
 Bounce debouncer = Bounce();
 int SW_status = 0;
 int i = 255;
-int touch;
-int count = 0;
-int threshold = 40;
-bool touch1detected = false;
-bool touch2detected = false;
-
-void gotTouch()
-{
-  touch1detected = true;
-}
-
-void gotTouch1()
-{
-  touch2detected = true;
-}
-
-int poyT1=0,countT1=0;
-int poyT2=0,countT2=0;
-void Touch2()
-{ 
-  if (touchRead(T2) <= 20 && poyT1!=1)
-  {
-    if (countT1 == 0)
-    {
-      Serial.println(touchRead(T2));
-      status_room2=255;
-      countT1++;
-      poyT1=!poyT1;
-    }
-    countT1++;
-  }
-  if(touchRead(T2) > 20 ){
-    
-     poyT1=!poyT1;
-     countT1=0;
-  }
-  else if (touchRead(T2) <= 20  && poyT1==1)
-  {
-    if (countT1 == 0)
-    {
-      Serial.println(touchRead(T2));
-      status_room2=0;
-      countT1++;
-      poyT1=!poyT1;
-    }
-    countT1++;
-  }
-}
-
-void Touch3()
-{ 
-  if (touchRead(T3) <= 20 && poyT2!=1)
-  {
-    if (countT2 == 0)
-    {
-      Serial.println("NO");
-      status_room3=255;
-      countT2++;
-      poyT2=!poyT2;
-    }
-    countT2++;
-  }
-  if(touchRead(T3) > 20 ){
-    
-     poyT2=!poyT2;
-     countT2=0;
-  }
-  else if (touchRead(T3) <= 20  && poyT2==1)
-  {
-    if (countT2== 0)
-    {
-      Serial.println("yes");
-      status_room3=0;
-      countT2++;
-      poyT2=!poyT2;
-    }
-    countT2++;
-  }
-}
 
 void Senlight(void *param)
 {
   while (1)
-  {   Touch2();
-      vTaskDelay( 1 /portTICK_PERIOD_MS);
-      Touch3();
-      vTaskDelay( 1 /portTICK_PERIOD_MS);
+  {  
+      Serial.println(map(analogRead(LDR), 1250, 4096, 0, 255));
       sensor_LDR=map(analogRead(LDR), 1250, 4096, 0, 255);
-      vTaskDelay( 1 /portTICK_PERIOD_MS);
+      vTaskDelay( 100 /portTICK_PERIOD_MS);
   }
 }
+
+
+
+void T2()
+{ int poy=0;
+  int count=0;
+  int value_touch1=touchRead(T2);
+  if (value_touch1 <= 20 && poy!=1)
+  {
+    if (count == 0)
+    {
+      Serial.println("NO");
+      status_room2=255;
+      count++;
+      poy=!poy;
+    }
+    count++;
+  }
+  if(value_touch1 > 20 ){
+    
+     poy=!poy;
+     count=0;
+  }
+  else if (value_touch1 <= 20  && poy==1)
+  {
+    if (count == 0)
+    {
+      Serial.println("yes");
+      status_room2=0;
+      count++;
+      poy=!poy;
+    }
+    count++;
+  }
+}
+
+
 
 
 void GET_POST(void *param)
 {
   while (1)
   {
-
 
   }
 }
@@ -132,14 +87,12 @@ void setup()
   ledcAttachPin(GREEN, 0);
   ledcAttachPin(YELLOW, 1);
   ledcAttachPin(RED, 2);
-  touchAttachInterrupt(T2, gotTouch, threshold);
-  touchAttachInterrupt(T3, gotTouch1, threshold);
   debouncer.attach(BUTTON, INPUT_PULLUP);
   debouncer.interval(27);
   sensor_LDR=map(analogRead(LDR), 0, 4095, 0, 255);
   Serial.println(analogRead(LDR));
   xTaskCreatePinnedToCore(Senlight, "Senlight", 1000, NULL, 1, &TaskA, 0);
-  xTaskCreatePinnedToCore(GET_POST, "GET_POST", 1000, NULL, 1, &TaskB, 1);
+  // xTaskCreatePinnedToCore(GET_POST, "GET_POST", 10240, NULL, 1, &TaskB, 1);
 }
 
 void loop()
@@ -217,7 +170,5 @@ void loop()
       }
       delay(5);
     }
-    Touch2();
-    Touch3();
   
 }

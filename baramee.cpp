@@ -13,9 +13,9 @@ int status_room3 = 0;
 int value_light1 = 255;
 int value_light2 = 255;
 int value_light3 = 255;
-int auto_light1 = 1;
-int auto_light2 = 1;
-int auto_light3 = 1;
+int auto_light1 = 0;
+int auto_light2 = 0;
+int auto_light3 = 0;
 int sensor_LDR;
 #define BUTTON 27
 Bounce debouncer = Bounce();
